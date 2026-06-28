@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #0f1a30; }
+  * { box-sizing: border-box; }
+
+  @keyframes ta-spin    { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
+  @keyframes ta-spin-rev{ from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
+
+  @keyframes ta-pulse {
+    0%        { transform: scale(var(--ta-pulse-min, 0.84)); }
+    13%       { transform: scale(var(--ta-pulse, 1.16)); }
+    32%, 100% { transform: scale(var(--ta-pulse-min, 0.84)); }
+  }
+  @keyframes ta-breathe {
+    0%, 100% { transform: scale(1) translateY(0);    opacity: 1; }
+    50%      { transform: scale(1.012);                opacity: 1; }
+  }
+  @keyframes ta-fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* pure-CSS determinate progress — runs without rAF */
+  @property --ta-load { syntax: '<integer>'; initial-value: 0; inherits: false; }
+  @keyframes ta-count { 0% { --ta-load: 0; } 80% { --ta-load: 100; } 100% { --ta-load: 100; } }
+  @keyframes ta-fill  { 0% { stroke-dashoffset: 1131; } 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
+  @keyframes ta-dots  { 0%,20% { content: ''; } 40% { content: '.'; } 60% { content: '..'; } 80%,100% { content: '...'; } }
+
+  #ta-progressRing { animation: ta-fill var(--ta-prog-dur, 4.6s) linear infinite; stroke: var(--ta-prog-color, #52cfc8); }
+  .ta-count { counter-reset: load var(--ta-load); animation: ta-count var(--ta-prog-dur, 4.6s) linear infinite; }
+  .ta-count::after { content: counter(load); }
+  .ta-dots::after { content: ''; animation: ta-dots 1.6s steps(1) infinite; }
+
+  .ta-logo { width: 100%; height: 100%; display: block; overflow: visible; }
+
+  /* decorative rotating rings, around the logo geometric centre */
+  .ta-logo .ringAll {
+    transform-box: view-box;
+    transform-origin: 298.72px 151.135px;
+    animation: ta-spin var(--ta-ring-a-dur, 9s) linear infinite;
+    animation-play-state: var(--ta-ring-play, running);
+  }
+  .ta-logo .ringA { fill: var(--ta-ring-color, #5d7eac); }
+  .ta-logo .ringB { fill: color-mix(in srgb, var(--ta-ring-color, #5d7eac) 74%, #c8d6ea); }
+
+  /* people scale in place, staggered like a relay */
+  .ta-logo .topHead, .ta-logo .topHeadOutline, .ta-logo .topBody,
+  .ta-logo .leftHead, .ta-logo .leftHeadOutline, .ta-logo .leftBody,
+  .ta-logo .rightHead, .ta-logo .rightHeadOutline, .ta-logo .rightBody {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .ta-logo .topPerson   { animation: ta-pulse 2.4s cubic-bezier(.45,0,.2,1) infinite; }
+  .ta-logo .leftPerson  { animation: ta-pulse 2.4s cubic-bezier(.45,0,.2,1) infinite; animation-delay: .8s; }
+  .ta-logo .rightPerson { animation: ta-pulse 2.4s cubic-bezier(.45,0,.2,1) infinite; animation-delay: 1.6s; }
+  .ta-logo .topPerson, .ta-logo .leftPerson, .ta-logo .rightPerson { transform-box: fill-box; transform-origin: center; }
+</style>
+</helmet>
+<div id="ta-root" style="position:fixed; inset:0; background:radial-gradient(120% 120% at 50% 38%, #1a2c4d 0%, #0f1a30 60%, #0a1326 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:46px; font-family:'Space Grotesk', system-ui, sans-serif;">
+
+  <div style="position:relative; width:380px; height:380px; display:flex; align-items:center; justify-content:center; animation: ta-breathe 5s ease-in-out infinite;">
+
+    <!-- determinate progress ring around the mark -->
+    <svg id="ta-progress-svg" viewBox="0 0 380 380" style="position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible;">
+      <circle cx="190" cy="190" r="180" fill="none" stroke="#23386044" stroke-width="3" />
+      <circle id="ta-progressRing" cx="190" cy="190" r="180" fill="none" stroke="#52cfc8" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="1131" stroke-dashoffset="1131" style="filter:drop-shadow(0 0 6px var(--ta-prog-color, #52cfc8)); transition:stroke .4s;" />
+    </svg>
+
+    <!-- colorized animated logo gets injected here -->
+    <div id="ta-logoHost" style="width:300px; height:300px; display:flex; align-items:center; justify-content:center;"></div>
+  </div>
+
+  <div id="ta-progress-block" style="display:flex; flex-direction:column; align-items:center; gap:16px; animation: ta-fade-up .8s ease both;">
+    <div style="display:flex; align-items:baseline; gap:10px;">
+      <span class="ta-count" style="font-family:'JetBrains Mono', monospace; font-size:40px; font-weight:600; color:#eef3fb; letter-spacing:-1px; font-variant-numeric:tabular-nums;"></span>
+      <span style="font-family:'JetBrains Mono', monospace; font-size:20px; font-weight:400; color:#6f86ab;">%</span>
+    </div>
+    <div class="ta-dots" style="text-transform:uppercase; letter-spacing:.42em; font-size:12px; font-weight:500; color:#7b93ba; padding-left:.42em;">Loading</div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;ringSpeed&quot;:        {&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0,&quot;max&quot;:3,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},
+  &quot;pulseIntensity&quot;:   {&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1.16,&quot;min&quot;:1,&quot;max&quot;:1.5,&quot;step&quot;:0.02,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},
+  &quot;progressDuration&quot;: {&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:4.6,&quot;min&quot;:2,&quot;max&quot;:10,&quot;step&quot;:0.2,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},
+  &quot;showProgress&quot;:     {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},
+  &quot;ringColor&quot;:        {&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#5d7eac&quot;,&quot;options&quot;:[&quot;#5d7eac&quot;,&quot;#6c63b5&quot;,&quot;#3f8f8a&quot;,&quot;#7b8aa0&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Color&quot;},
+  &quot;progressColor&quot;:    {&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#52cfc8&quot;,&quot;options&quot;:[&quot;#52cfc8&quot;,&quot;#34bd87&quot;,&quot;#e0c98a&quot;,&quot;#7aa2e0&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Color&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this._injectLogo();
+    this._applyConfig();
+  }
+
+  componentDidUpdate() {
+    this._applyConfig();
+  }
+
+  _applyConfig() {
+    const root = document.getElementById('ta-root');
+    if (!root) return;
+    const p = this.props || {};
+    let speed = Number(p.ringSpeed ?? 1);
+    if (!isFinite(speed) || speed < 0) speed = 1;
+    if (speed === 0) {
+      // 0 = stopped: pause the rotation rather than dividing by zero
+      root.style.setProperty('--ta-ring-play', 'paused');
+    } else {
+      root.style.setProperty('--ta-ring-play', 'running');
+      root.style.setProperty('--ta-ring-a-dur', (9 / speed).toFixed(2) + 's');
+    }
+    const peak = Number(p.pulseIntensity ?? 1.16);
+    root.style.setProperty('--ta-pulse', String(peak));
+    // figures out of focus shrink — more contrast as intensity rises
+    root.style.setProperty('--ta-pulse-min', Math.max(0.62, 2 - peak).toFixed(3));
+    root.style.setProperty('--ta-prog-dur', String(p.progressDuration ?? 4.6) + 's');
+    root.style.setProperty('--ta-ring-color', p.ringColor ?? '#5d7eac');
+    root.style.setProperty('--ta-prog-color', p.progressColor ?? '#52cfc8');
+
+    const show = p.showProgress !== false;
+    const ringSvg = document.getElementById('ta-progress-svg');
+    const block = document.getElementById('ta-progress-block');
+    if (ringSvg) ringSvg.style.display = show ? '' : 'none';
+    if (block) block.style.display = show ? '' : 'none';
+  }
+
+  async _injectLogo() {
+    const host = document.getElementById('ta-logoHost');
+    if (!host || host.querySelector('svg')) return;
+    try {
+      const res = await fetch('ta_logo_colored.svg');
+      const svg = await res.text();
+      host.innerHTML = svg;
+      const root = host.querySelector('svg');
+      if (!root) return;
+      const wrap = (cls, members) => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', cls);
+        const first = root.querySelector('.' + members[0]);
+        if (!first) return;
+        first.parentNode.insertBefore(g, first);
+        members.forEach(m => { const el = root.querySelector('.' + m); if (el) g.appendChild(el); });
+      };
+      wrap('ringAll',     ['ringA', 'ringB']);
+      wrap('topPerson',   ['topBody', 'topHeadOutline', 'topHead']);
+      wrap('leftPerson',  ['leftBody', 'leftHeadOutline', 'leftHead']);
+      wrap('rightPerson', ['rightBody', 'rightHeadOutline', 'rightHead']);
+    } catch (e) { /* preview may block fetch */ }
+  }
+
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
