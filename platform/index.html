@@ -19,7 +19,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 input,textarea,select{font-family:inherit}
 a{color:inherit}
 ::selection{background:#23473A;color:#F6F4EF}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{transform:translateY(14px)}to{transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulseDot{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
 .reveal{animation:fadeUp .5s cubic-bezier(.2,.7,.3,1) both}
@@ -36,16 +36,31 @@ a{color:inherit}
         <span style="width:30px;height:30px;border-radius:8px;background:#23473A;color:#F6F4EF;font-family:'Lora',serif;font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center">О</span>
         <span style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#1E241D;letter-spacing:-.01em">ОППЛ<span style="color:#2E6B54">.Специалисты</span></span>
       </button>
+      <sc-if value="{{ isDesktop }}">
       <nav style="display:flex;gap:4px;margin-left:8px">
         <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="4">
           <button onClick="{{ nav.go }}" style="{{ nav.style }}">{{ nav.label }}</button>
         </sc-for>
       </nav>
+      </sc-if>
+      <sc-if value="{{ isDesktop }}">
       <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
         <button onClick="{{ goDashboard }}" style="font-size:14px;font-weight:500;color:#565B52;padding:9px 14px;border-radius:9px">Для специалистов</button>
         <button onClick="{{ goMatch }}" style="font-size:14px;font-weight:600;color:#F6F4EF;background:#23473A;padding:10px 18px;border-radius:10px;box-shadow:0 1px 2px rgba(30,36,29,.12)">Подобрать специалиста</button>
       </div>
+      </sc-if>
+      <sc-if value="{{ isMobile }}">
+      <button onClick="{{ toggleMenu }}" aria-label="Меню" style="margin-left:auto;width:42px;height:42px;border-radius:11px;background:#EBE7DE;display:flex;align-items:center;justify-content:center;font-size:18px;color:#1E241D">☰</button>
+      </sc-if>
     </div>
+    <sc-if value="{{ mobileMenuOpen }}">
+    <div style="border-top:1px solid #E3DFD6;background:#F6F4EF;padding:10px 16px 16px;display:flex;flex-direction:column;gap:4px">
+      <button onClick="{{ goMatch }}" style="text-align:left;font-size:15.5px;font-weight:600;color:#1E241D;padding:13px 12px;border-radius:10px">Подбор ИИ</button>
+      <button onClick="{{ goCatalog }}" style="text-align:left;font-size:15.5px;font-weight:600;color:#1E241D;padding:13px 12px;border-radius:10px">Каталог</button>
+      <button onClick="{{ goDashboard }}" style="text-align:left;font-size:15.5px;font-weight:500;color:#565B52;padding:13px 12px;border-radius:10px">Для специалистов</button>
+      <button onClick="{{ goMatch }}" style="text-align:center;font-size:15.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:14px;border-radius:11px;margin-top:6px">Подобрать специалиста</button>
+    </div>
+    </sc-if>
   </header>
 
   <main style="flex:1">
@@ -54,7 +69,7 @@ a{color:inherit}
     <div class="reveal">
 
       <!-- HERO -->
-      <section style="max-width:1180px;margin:0 auto;padding:64px 28px 44px;display:flex;flex-wrap:wrap;gap:52px;align-items:center">
+      <section style="max-width:1180px;margin:0 auto;padding:{{ heroPad }};display:flex;flex-wrap:wrap;gap:52px;align-items:center">
         <div style="flex:1;min-width:340px">
           <div style="display:inline-flex;align-items:center;gap:9px;padding:7px 13px 7px 9px;border-radius:100px;background:#E9EFEA;border:1px solid #D3E0D8;margin-bottom:26px">
             <span style="width:20px;height:20px;border-radius:5px;background:#23473A;color:#F6F4EF;font-family:'Lora',serif;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">О</span>
@@ -363,7 +378,7 @@ a{color:inherit}
 
       <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
         <!-- FILTERS -->
-        <aside style="flex:0 0 268px;position:sticky;top:88px;background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px">
+        <aside style="flex:0 0 268px;{{ stickyAside }}background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
             <span style="font-size:15px;font-weight:600;color:#1E241D">Фильтры</span>
             <button onClick="{{ clearFilters }}" style="font-size:12.5px;color:#2E6B54;font-weight:500">Сбросить</button>
@@ -474,7 +489,7 @@ a{color:inherit}
         </div>
 
         <!-- BOOKING CARD -->
-        <aside style="flex:0 0 320px;position:sticky;top:88px;background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:24px;box-shadow:0 16px 44px -26px rgba(30,36,29,.3)">
+        <aside style="flex:0 0 320px;{{ stickyAside }}background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:24px;box-shadow:0 16px 44px -26px rgba(30,36,29,.3)">
           <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px"><span style="font-size:28px;font-weight:700;color:#1E241D">{{ sel.priceStr }}</span><span style="font-size:13px;color:#9AA093">/ сессия 50 мин</span></div>
           <div style="font-size:13px;color:#6E7368;margin-bottom:18px">{{ sel.formatsStr }}</div>
           <div style="background:#E9EFEA;border-radius:11px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
@@ -712,6 +727,15 @@ a{color:inherit}
     <div style="border-top:1px solid #33392F"><div style="max-width:1180px;margin:0 auto;padding:18px 28px;font-size:12.5px;color:#6E7368">© 2026 ОППЛ.Специалисты · Прототип</div></div>
   </footer>
 
+  <sc-if value="{{ isMobile }}">
+  <div style="height:68px"></div>
+  <nav style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(246,244,239,.96);backdrop-filter:blur(12px);border-top:1px solid #E3DFD6;display:flex;padding:6px 6px 9px">
+    <sc-for list="{{ bottomNav }}" as="b" hint-placeholder-count="4">
+      <button onClick="{{ b.go }}" style="{{ b.style }}"><span style="{{ b.iconStyle }}">{{ b.icon }}</span><span style="font-size:10.5px;font-weight:{{ b.weight }}">{{ b.label }}</span></button>
+    </sc-for>
+  </nav>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760}}">
@@ -727,7 +751,16 @@ class Component extends DCLogic {
     bookSlot: null,
     bookPackage: 'single',
     dashTab: 'overview',
+    isMobile: false,
+    mobileMenuOpen: false,
   };
+
+  componentDidMount(){
+    this._onResize = ()=>{ const m = window.innerWidth < 760; if(m!==this.state.isMobile) this.setState({ isMobile:m }); };
+    this._onResize();
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount(){ window.removeEventListener('resize', this._onResize); }
 
   data() {
     return {
@@ -748,7 +781,7 @@ class Component extends DCLogic {
     return { c:'#7A6B8A', bg:'#ECE7F0', dot:'#7A6B8A' };
   }
 
-  nav(route){ this.setState({ route }); if(typeof window!=='undefined') window.scrollTo({top:0}); }
+  nav(route){ this.setState({ route, mobileMenuOpen:false }); if(typeof window!=='undefined') window.scrollTo({top:0}); }
 
   getSelected(){ return this.data().specialists.find(s=>s.id===this.state.selectedId) || this.data().specialists[0]; }
 
@@ -811,8 +844,20 @@ class Component extends DCLogic {
     return {
       navItems,
       goHome: go('home'),
-      goMatch: ()=>{ this.setState({ route:'match', matchStep:0 }); window.scrollTo({top:0}); },
+      goMatch: ()=>{ this.setState({ route:'match', matchStep:0, mobileMenuOpen:false }); window.scrollTo({top:0}); },
       goDashboard: go('dashboard'), goCatalog: go('catalog'),
+
+      // responsive
+      isMobile:S.isMobile, isDesktop:!S.isMobile, mobileMenuOpen:S.mobileMenuOpen,
+      toggleMenu:()=>this.setState(s=>({ mobileMenuOpen:!s.mobileMenuOpen })),
+      stickyAside:S.isMobile?'position:static;':'position:sticky;top:88px;',
+      heroPad:S.isMobile?'44px 18px 32px':'64px 28px 44px',
+      bottomNav:[['home','⌂','Главная'],['match','✦','Подбор'],['catalog','▤','Каталог'],['dashboard','◈','Кабинет']].map(([r,ic,l])=>{
+        const on=S.route===r;
+        return { icon:ic, label:l, go:()=>this.nav(r), weight:on?600:500,
+          style:`flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;color:${on?'#23473A':'#9AA093'}`,
+          iconStyle:`font-size:19px;line-height:1` };
+      }),
 
       isHome:S.route==='home', isMatch:S.route==='match', isCatalog:S.route==='catalog',
       isProfile:S.route==='profile', isBooking:S.route==='booking', isDashboard:S.route==='dashboard',
@@ -828,7 +873,7 @@ class Component extends DCLogic {
         { label:'Комиссия платформы', ours:'5–10%', theirs:'20–30%' },
         { label:'За аккредитацией стоит', ours:'ОППЛ', theirs:'Частные компании' },
       ].map((r,i)=>({ ...r, style:`display:grid;grid-template-columns:1.6fr 1fr 1fr;${i%2?'background:#FBFAF6;':''}${i>0?'border-top:1px solid #F0EDE6;':''}` })),
-      startMatch: ()=>{ this.setState({ route:'match', matchStep:0 }); window.scrollTo({top:0}); },
+      startMatch: ()=>{ this.setState({ route:'match', matchStep:0, mobileMenuOpen:false }); window.scrollTo({top:0}); },
 
       // match
       matchStep:S.matchStep,
