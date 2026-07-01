@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:#F6F4EF;color:#565B52;font-family:'Golos Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit}
+a{color:inherit}
+::selection{background:#23473A;color:#F6F4EF}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulseDot{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
+.reveal{animation:fadeUp .5s cubic-bezier(.2,.7,.3,1) both}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#D8D2C6;border-radius:8px;border:2px solid #F6F4EF}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+  <header style="position:sticky;top:0;z-index:50;background:rgba(246,244,239,.86);backdrop-filter:blur(12px);border-bottom:1px solid #E3DFD6">
+    <div style="max-width:1180px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;gap:32px">
+      <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:11px;padding:0">
+        <span style="width:30px;height:30px;border-radius:8px;background:#23473A;color:#F6F4EF;font-family:'Lora',serif;font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center">О</span>
+        <span style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#1E241D;letter-spacing:-.01em">ОППЛ<span style="color:#2E6B54">.Специалисты</span></span>
+      </button>
+      <nav style="display:flex;gap:4px;margin-left:8px">
+        <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="4">
+          <button onClick="{{ nav.go }}" style="{{ nav.style }}">{{ nav.label }}</button>
+        </sc-for>
+      </nav>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <button onClick="{{ goDashboard }}" style="font-size:14px;font-weight:500;color:#565B52;padding:9px 14px;border-radius:9px">Для специалистов</button>
+        <button onClick="{{ goMatch }}" style="font-size:14px;font-weight:600;color:#F6F4EF;background:#23473A;padding:10px 18px;border-radius:10px;box-shadow:0 1px 2px rgba(30,36,29,.12)">Подобрать специалиста</button>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex:1">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div class="reveal">
+
+      <!-- HERO -->
+      <section style="max-width:1180px;margin:0 auto;padding:64px 28px 44px;display:flex;flex-wrap:wrap;gap:52px;align-items:center">
+        <div style="flex:1;min-width:340px">
+          <div style="display:inline-flex;align-items:center;gap:9px;padding:7px 13px 7px 9px;border-radius:100px;background:#E9EFEA;border:1px solid #D3E0D8;margin-bottom:26px">
+            <span style="width:20px;height:20px;border-radius:5px;background:#23473A;color:#F6F4EF;font-family:'Lora',serif;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">О</span>
+            <span style="font-size:12.5px;font-weight:600;color:#2E6B54;letter-spacing:.01em">Аккредитация выдаётся профессиональным сообществом</span>
+          </div>
+          <h1 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(38px,4.6vw,58px);line-height:1.06;letter-spacing:-.02em;color:#1E241D;margin:0 0 22px">Найдите психолога, которому&nbsp;<span style="color:#2E6B54;font-style:italic">действительно</span> можно доверять</h1>
+          <p style="font-size:17.5px;line-height:1.6;color:#565B52;margin:0 0 30px;max-width:520px">Опишите, что вас беспокоит — своими словами, без анкет и категорий. Мы подберём 3–5 специалистов, аккредитованных Общероссийской профессиональной психотерапевтической лигой.</p>
+
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:8px;box-shadow:0 12px 40px -18px rgba(30,36,29,.28)">
+            <div style="padding:14px 16px 8px;font-size:13px;color:#8C9186;display:flex;align-items:center;gap:8px">
+              <span style="display:inline-flex;gap:3px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.4s infinite"></span>
+                <span style="width:6px;height:6px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.4s .2s infinite"></span>
+                <span style="width:6px;height:6px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.4s .4s infinite"></span>
+              </span>
+              Подбор с помощью ИИ
+            </div>
+            <div onClick="{{ startMatch }}" style="padding:6px 16px 16px;color:#9AA093;font-size:16px;line-height:1.5;cursor:text;min-height:56px">«Постоянно ссоримся с партнёром, и я чувствую, что меня не слышат…»</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border-top:1px solid #F0EDE6">
+              <span style="font-size:12.5px;color:#9AA093">Конфиденциально · без регистрации</span>
+              <button onClick="{{ startMatch }}" style="font-size:14.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:11px 20px;border-radius:11px;display:flex;align-items:center;gap:8px">Подобрать специалиста <span style="font-size:16px">→</span></button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:18px;font-size:14px;color:#6E7368">
+            <span>Уже знаете, что ищете?</span>
+            <button onClick="{{ goCatalog }}" style="font-weight:600;color:#2E6B54;text-decoration:underline;text-underline-offset:3px">Открыть каталог из 70+ методов</button>
+          </div>
+        </div>
+
+        <!-- floating trust card -->
+        <div style="flex:0 0 340px;max-width:100%">
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:20px;padding:22px;box-shadow:0 20px 50px -24px rgba(30,36,29,.35)">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+              <div style="width:56px;height:56px;border-radius:14px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center">МК</div>
+              <div>
+                <div style="font-family:'Lora',serif;font-size:18px;font-weight:600;color:#1E241D">Мария Кольцова</div>
+                <div style="font-size:13px;color:#8C9186">ЭФТ · Москва</div>
+              </div>
+            </div>
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:9px;background:#F3ECD9;margin-bottom:16px">
+              <span style="width:8px;height:8px;border-radius:50%;background:#A07C3B"></span>
+              <span style="font-size:13px;font-weight:600;color:#A07C3B">Эксперт ОППЛ</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:13.5px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#8C9186">Аккредитация подтверждена</span><span style="color:#1E241D;font-weight:600;display:flex;align-items:center;gap:6px"><span style="color:#2E6B54">✓</span> ОППЛ</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#8C9186">Действует до</span><span style="color:#1E241D;font-weight:600">мар 2027</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#8C9186">Публикации · супервизия</span><span style="color:#1E241D;font-weight:600">8 · 340 ч</span></div>
+            </div>
+            <div style="margin-top:16px;padding-top:15px;border-top:1px solid #F0EDE6;font-size:12.5px;color:#8C9186;line-height:1.5;display:flex;gap:9px">
+              <span style="color:#2E6B54;font-size:15px">◆</span>
+              <span>Дата переаккредитации видна клиенту. Квалификация проверена не однажды при регистрации, а подтверждается регулярно.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TRUST BAND -->
+      <section style="background:#23473A;color:#EAF0EC">
+        <div style="max-width:1180px;margin:0 auto;padding:34px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+          <div style="padding:6px 16px">
+            <div style="font-family:'Lora',serif;font-size:34px;font-weight:600;color:#fff">70+</div>
+            <div style="font-size:13.5px;color:#A9C0B4;margin-top:2px">терапевтических методов — самый широкий выбор в России</div>
+          </div>
+          <div style="padding:6px 16px;border-left:1px solid #34564A">
+            <div style="font-family:'Lora',serif;font-size:34px;font-weight:600;color:#fff">3 уровня</div>
+            <div style="font-size:13.5px;color:#A9C0B4;margin-top:2px">аккредитации: Практик · Специалист · Эксперт</div>
+          </div>
+          <div style="padding:6px 16px;border-left:1px solid #34564A">
+            <div style="font-family:'Lora',serif;font-size:34px;font-weight:600;color:#fff">5–10%</div>
+            <div style="font-size:13.5px;color:#A9C0B4;margin-top:2px">комиссия платформы — против 20–30% у конкурентов</div>
+          </div>
+          <div style="padding:6px 16px;border-left:1px solid #34564A">
+            <div style="font-family:'Lora',serif;font-size:34px;font-weight:600;color:#fff">Этика</div>
+            <div style="font-size:13.5px;color:#A9C0B4;margin-top:2px">Этическая комиссия с публичными решениями</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TWO WAYS -->
+      <section style="max-width:1180px;margin:0 auto;padding:72px 28px 20px">
+        <div style="text-align:center;max-width:640px;margin:0 auto 44px">
+          <div style="font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#2E6B54;margin-bottom:14px">Два способа найти специалиста</div>
+          <h2 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(28px,3.4vw,40px);line-height:1.1;letter-spacing:-.02em;color:#1E241D;margin:0">Начните так, как вам удобнее</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:20px;padding:32px;display:flex;flex-direction:column">
+            <div style="width:48px;height:48px;border-radius:13px;background:#23473A;color:#F6F4EF;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px">✦</div>
+            <div style="display:inline-flex;align-self:flex-start;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#2E6B54;background:#E9EFEA;padding:4px 10px;border-radius:6px;margin-bottom:14px">Рекомендуем</div>
+            <h3 style="font-family:'Lora',serif;font-size:23px;font-weight:600;color:#1E241D;margin:0 0 10px">Подбор с помощью ИИ</h3>
+            <p style="font-size:15px;line-height:1.6;color:#565B52;margin:0 0 22px;flex:1">Пишите свободно — без чекбоксов и клинических категорий. Система определит темы, тяжесть, формат и подходящие методы, и объяснит каждую рекомендацию простым языком.</p>
+            <button onClick="{{ startMatch }}" style="align-self:flex-start;font-size:14.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:12px 22px;border-radius:11px">Описать проблему словами →</button>
+          </div>
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:20px;padding:32px;display:flex;flex-direction:column">
+            <div style="width:48px;height:48px;border-radius:13px;background:#EBE7DE;color:#1E241D;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px">☰</div>
+            <div style="height:25px;margin-bottom:14px"></div>
+            <h3 style="font-family:'Lora',serif;font-size:23px;font-weight:600;color:#1E241D;margin:0 0 10px">Каталог с фильтрами</h3>
+            <p style="font-size:15px;line-height:1.6;color:#565B52;margin:0 0 22px;flex:1">Для тех, кто уже знает, что ищет. Фильтруйте по 70+ методам, уровню аккредитации, теме, формату, цене, городу и ближайшему свободному времени.</p>
+            <button onClick="{{ goCatalog }}" style="align-self:flex-start;font-size:14.5px;font-weight:600;color:#1E241D;background:#EBE7DE;padding:12px 22px;border-radius:11px">Открыть каталог →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section style="max-width:1180px;margin:0 auto;padding:72px 28px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px">
+          <div style="padding-right:20px">
+            <div style="font-family:'Lora',serif;font-size:15px;color:#B9BEB2;margin-bottom:8px">01</div>
+            <h4 style="font-family:'Lora',serif;font-size:20px;font-weight:600;color:#1E241D;margin:0 0 8px">Опишите или отфильтруйте</h4>
+            <p style="font-size:14.5px;line-height:1.6;color:#6E7368;margin:0">Расскажите своими словами или задайте параметры в каталоге.</p>
+          </div>
+          <div style="padding-right:20px;border-left:1px solid #E3DFD6;padding-left:26px">
+            <div style="font-family:'Lora',serif;font-size:15px;color:#B9BEB2;margin-bottom:8px">02</div>
+            <h4 style="font-family:'Lora',serif;font-size:20px;font-weight:600;color:#1E241D;margin:0 0 8px">Изучите профиль</h4>
+            <p style="font-size:14.5px;line-height:1.6;color:#6E7368;margin:0">Метод, уровень аккредитации, дата переаккредитации, публикации и часы супервизии — всё на виду.</p>
+          </div>
+          <div style="border-left:1px solid #E3DFD6;padding-left:26px">
+            <div style="font-family:'Lora',serif;font-size:15px;color:#B9BEB2;margin-bottom:8px">03</div>
+            <h4 style="font-family:'Lora',serif;font-size:20px;font-weight:600;color:#1E241D;margin:0 0 8px">Запишитесь и оплатите</h4>
+            <p style="font-size:14.5px;line-height:1.6;color:#6E7368;margin:0">Разовая сессия, пакет из 3, 5 или 10, рассрочка или подарочный сертификат.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACCREDITATION LEVELS -->
+      <section style="background:#EFEBE2">
+        <div style="max-width:1180px;margin:0 auto;padding:66px 28px">
+          <div style="max-width:600px;margin:0 0 38px">
+            <div style="font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#A07C3B;margin-bottom:14px">Прозрачная квалификация</div>
+            <h2 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(28px,3.4vw,38px);line-height:1.12;letter-spacing:-.02em;color:#1E241D;margin:0 0 12px">Три уровня аккредитации ОППЛ</h2>
+            <p style="font-size:16px;line-height:1.6;color:#565B52;margin:0">Каждый уровень имеет чёткие требования и видимую дату переаккредитации. Клиент видит, что квалификация актуальна.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+            <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:26px">
+              <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:#ECE7F0;margin-bottom:18px"><span style="width:8px;height:8px;border-radius:50%;background:#7A6B8A"></span><span style="font-size:13px;font-weight:600;color:#7A6B8A">Практик</span></div>
+              <p style="font-size:14.5px;line-height:1.6;color:#565B52;margin:0">Подтверждённое образование и базовая подготовка по выбранному методу.</p>
+            </div>
+            <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:26px">
+              <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:#E5EFE9;margin-bottom:18px"><span style="width:8px;height:8px;border-radius:50%;background:#2E6B54"></span><span style="font-size:13px;font-weight:600;color:#2E6B54">Специалист</span></div>
+              <p style="font-size:14.5px;line-height:1.6;color:#565B52;margin:0">Значительный документально подтверждённый объём практики и супервизии.</p>
+            </div>
+            <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:26px">
+              <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:#F3ECD9;margin-bottom:18px"><span style="width:8px;height:8px;border-radius:50%;background:#A07C3B"></span><span style="font-size:13px;font-weight:600;color:#A07C3B">Эксперт</span></div>
+              <p style="font-size:14.5px;line-height:1.6;color:#565B52;margin:0">Публикации, преподавательская деятельность и старшее членство в лиге.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMPARISON -->
+      <section style="max-width:1000px;margin:0 auto;padding:72px 28px">
+        <div style="text-align:center;max-width:600px;margin:0 auto 40px">
+          <h2 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(28px,3.4vw,38px);line-height:1.12;letter-spacing:-.02em;color:#1E241D;margin:0 0 12px">Чем мы отличаемся</h2>
+          <p style="font-size:16px;line-height:1.6;color:#565B52;margin:0">Доверие институциональное, а не алгоритмическое: аккредитацию выдаёт сообщество, а не стартап.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #E3DFD6;border-radius:18px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;background:#23473A;color:#EAF0EC">
+            <div style="padding:16px 22px;font-size:13px;font-weight:600"></div>
+            <div style="padding:16px 18px;font-size:14px;font-weight:700;text-align:center;font-family:'Lora',serif">ОППЛ.Специалисты</div>
+            <div style="padding:16px 18px;font-size:13.5px;font-weight:500;text-align:center;color:#A9C0B4">Конкуренты</div>
+          </div>
+          <sc-for list="{{ compareRows }}" as="row" hint-placeholder-count="6">
+            <div style="{{ row.style }}">
+              <div style="padding:15px 22px;font-size:14.5px;color:#1E241D;font-weight:500">{{ row.label }}</div>
+              <div style="padding:15px 18px;text-align:center;font-size:14.5px;font-weight:600;color:#2E6B54">{{ row.ours }}</div>
+              <div style="padding:15px 18px;text-align:center;font-size:14px;color:#9AA093">{{ row.theirs }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- FEATURED -->
+      <section style="max-width:1180px;margin:0 auto;padding:20px 28px 76px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:26px">
+          <h2 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(26px,3vw,34px);letter-spacing:-.02em;color:#1E241D;margin:0">Специалисты платформы</h2>
+          <button onClick="{{ goCatalog }}" style="font-size:14.5px;font-weight:600;color:#2E6B54;text-decoration:underline;text-underline-offset:3px">Смотреть всех →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px">
+          <sc-for list="{{ featured }}" as="s" hint-placeholder-count="3">
+            <div onClick="{{ s.open }}" style="background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:22px;cursor:pointer;transition:box-shadow .2s,transform .2s" style-hover="box-shadow:0 16px 40px -22px rgba(30,36,29,.4);transform:translateY(-3px)">
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+                <div style="width:54px;height:54px;border-radius:14px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:19px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ s.initials }}</div>
+                <div>
+                  <div style="font-family:'Lora',serif;font-size:17.5px;font-weight:600;color:#1E241D">{{ s.name }}</div>
+                  <div style="font-size:13px;color:#8C9186">{{ s.city }} · {{ s.formatsStr }}</div>
+                </div>
+              </div>
+              <div style="font-size:13.5px;color:#565B52;margin-bottom:14px;min-height:40px">{{ s.modality }}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid #F0EDE6">
+                <div style="display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:8px;background:{{ s.levelBg }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ s.levelDot }}"></span><span style="font-size:12.5px;font-weight:600;color:{{ s.levelC }}">{{ s.level }}</span></div>
+                <div style="font-size:15px;font-weight:600;color:#1E241D">{{ s.priceStr }}<span style="font-size:12px;color:#9AA093;font-weight:400"> /сессия</span></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section style="background:#23473A">
+        <div style="max-width:1180px;margin:0 auto;padding:64px 28px;text-align:center">
+          <h2 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.02em;color:#fff;margin:0 auto 16px;max-width:640px">Сделайте первый шаг там, где ему можно доверять</h2>
+          <p style="font-size:17px;line-height:1.6;color:#A9C0B4;margin:0 auto 32px;max-width:520px">Опишите, что вас беспокоит — конфиденциально и без регистрации.</p>
+          <button onClick="{{ startMatch }}" style="font-size:16px;font-weight:600;color:#23473A;background:#F6F4EF;padding:15px 32px;border-radius:13px">Подобрать специалиста</button>
+        </div>
+      </section>
+
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isMatch }}">
+    <div class="reveal" style="max-width:900px;margin:0 auto;padding:44px 28px 72px">
+
+      <sc-if value="{{ isMatchInput }}">
+      <div>
+        <div style="font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#2E6B54;margin-bottom:16px">Подбор с помощью ИИ</div>
+        <h1 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.02em;color:#1E241D;margin:0 0 16px;max-width:640px">Расскажите, что вас беспокоит</h1>
+        <p style="font-size:16.5px;line-height:1.6;color:#565B52;margin:0 0 28px;max-width:600px">Своими словами — без анкет и категорий. Чем подробнее, тем точнее подбор. Всё конфиденциально.</p>
+        <div style="background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:8px;box-shadow:0 12px 40px -22px rgba(30,36,29,.25)">
+          <textarea value="{{ query }}" onChange="{{ onQuery }}" placeholder="Например: постоянно ссоримся с партнёром, и я чувствую, что меня не слышат…" style="width:100%;border:none;outline:none;resize:vertical;min-height:150px;padding:16px;font-size:16px;line-height:1.6;color:#1E241D;background:transparent"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:10px 10px 10px 14px;border-top:1px solid #F0EDE6">
+            <button onClick="{{ fillExample }}" style="font-size:13px;color:#6E7368;padding:7px 12px;border-radius:8px;background:#F1EEE7">＋ Вставить пример</button>
+            <button onClick="{{ runMatch }}" style="font-size:15px;font-weight:600;color:#F6F4EF;background:#23473A;padding:12px 24px;border-radius:11px">Подобрать специалистов →</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:18px;font-size:13.5px;color:#8C9186"><span style="color:#2E6B54;font-size:15px">🔒</span> Текст не передаётся третьим лицам и не сохраняется в профиле.</div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isMatchAnalyzing }}">
+      <div style="text-align:center;padding:80px 0">
+        <div style="display:inline-flex;gap:7px;margin-bottom:28px">
+          <span style="width:11px;height:11px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.3s infinite"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.3s .18s infinite"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.3s .36s infinite"></span>
+        </div>
+        <h2 style="font-family:'Lora',serif;font-weight:600;font-size:28px;color:#1E241D;margin:0 0 24px">Читаем ваше описание…</h2>
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:420px;margin:0 auto;text-align:left">
+          <div style="display:flex;align-items:center;gap:11px;font-size:15px;color:#565B52;animation:fadeIn .4s both"><span style="color:#2E6B54">✓</span> Определяем темы и их важность</div>
+          <div style="display:flex;align-items:center;gap:11px;font-size:15px;color:#565B52;animation:fadeIn .4s .5s both"><span style="color:#2E6B54">✓</span> Оцениваем формат и предпочтения</div>
+          <div style="display:flex;align-items:center;gap:11px;font-size:15px;color:#565B52;animation:fadeIn .4s 1s both"><span style="color:#2E6B54">✓</span> Подбираем подходящие методы терапии</div>
+          <div style="display:flex;align-items:center;gap:11px;font-size:15px;color:#8C9186;animation:fadeIn .4s 1.5s both"><span style="color:#2E6B54">◆</span> Ранжируем аккредитованных специалистов</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isMatchResults }}">
+      <div class="reveal">
+        <button onClick="{{ resetMatch }}" style="font-size:13.5px;color:#6E7368;margin-bottom:20px;display:flex;align-items:center;gap:6px">← Изменить описание</button>
+
+        <div style="background:#E9EFEA;border:1px solid #D3E0D8;border-radius:16px;padding:22px 24px;margin-bottom:28px">
+          <div style="font-size:13px;font-weight:600;color:#2E6B54;margin-bottom:12px">Мы поняли ваш запрос так</div>
+          <p style="font-size:15.5px;line-height:1.6;color:#1E241D;margin:0 0 16px">Речь о <b>кризисе в отношениях с партнёром</b> и ощущении, что вас <b>не слышат</b>. Похоже, важнее всего восстановить понимание в паре.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="font-size:12.5px;font-weight:500;color:#2E6B54;background:#fff;border:1px solid #D3E0D8;padding:6px 12px;border-radius:8px">Тема: отношения в паре</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2E6B54;background:#fff;border:1px solid #D3E0D8;padding:6px 12px;border-radius:8px">Тяжесть: умеренная</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2E6B54;background:#fff;border:1px solid #D3E0D8;padding:6px 12px;border-radius:8px">Формат: онлайн или очно</span>
+            <span style="font-size:12.5px;font-weight:500;color:#2E6B54;background:#fff;border:1px solid #D3E0D8;padding:6px 12px;border-radius:8px">Методы: ЭФТ, гештальт</span>
+          </div>
+        </div>
+
+        <h2 style="font-family:'Lora',serif;font-weight:600;font-size:24px;color:#1E241D;margin:0 0 6px">Рекомендуем этих специалистов</h2>
+        <p style="font-size:14px;color:#8C9186;margin:0 0 22px">Отсортированы по соответствию вашему запросу. Каждую рекомендацию мы объясняем.</p>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <sc-for list="{{ matches }}" as="s" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:24px;display:flex;flex-wrap:wrap;gap:20px">
+              <div style="flex:0 0 60px">
+                <div style="width:60px;height:60px;border-radius:15px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ s.initials }}</div>
+              </div>
+              <div style="flex:1;min-width:240px">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+                  <span style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#1E241D">{{ s.name }}</span>
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:7px;background:{{ s.levelBg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ s.levelDot }}"></span><span style="font-size:11.5px;font-weight:600;color:{{ s.levelC }}">{{ s.level }}</span></span>
+                </div>
+                <div style="font-size:13.5px;color:#8C9186;margin-bottom:12px">{{ s.modality }} · {{ s.city }} · опыт {{ s.exp }} лет</div>
+                <div style="background:#F7F5F0;border-radius:11px;padding:12px 14px;font-size:14px;line-height:1.55;color:#454B41;display:flex;gap:9px"><span style="color:#2E6B54;flex:0 0 auto">✦</span><span>Мы предлагаем {{ s.name }}, потому что она {{ s.reason }}</span></div>
+              </div>
+              <div style="flex:0 0 150px;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:12px">
+                <div style="text-align:right"><div style="font-size:19px;font-weight:700;color:#1E241D">{{ s.priceStr }}</div><div style="font-size:12px;color:#9AA093">за сессию</div></div>
+                <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                  <button onClick="{{ s.book }}" style="font-size:14px;font-weight:600;color:#F6F4EF;background:#23473A;padding:11px 16px;border-radius:10px;width:100%">Записаться</button>
+                  <button onClick="{{ s.open }}" style="font-size:14px;font-weight:600;color:#2E6B54;padding:9px 16px;border-radius:10px;background:#E9EFEA;width:100%">Профиль</button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#fff;border:1px dashed #CFC9BC;border-radius:16px;padding:20px 22px;margin-top:24px">
+          <div style="font-size:14px;font-weight:600;color:#1E241D;margin-bottom:12px">Уточните подбор в диалоге</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input value="{{ refine }}" onChange="{{ onRefine }}" placeholder="покажите кого-то дешевле · предпочитаю женщину · только онлайн" style="flex:1;min-width:220px;border:1px solid #E3DFD6;border-radius:11px;padding:12px 14px;font-size:14.5px;color:#1E241D;outline:none;background:#FBFAF6">
+            <button onClick="{{ applyRefine }}" style="font-size:14.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:12px 20px;border-radius:11px">Уточнить</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+    </sc-if>
+    <sc-if value="{{ isCatalog }}">
+    <div class="reveal" style="max-width:1180px;margin:0 auto;padding:40px 28px 72px">
+      <div style="margin-bottom:28px">
+        <h1 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.02em;color:#1E241D;margin:0 0 8px">Каталог специалистов</h1>
+        <p style="font-size:15.5px;color:#6E7368;margin:0">Фильтруйте по 70+ методам, уровню аккредитации, формату, цене и городу — самый широкий выбор в России.</p>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+        <!-- FILTERS -->
+        <aside style="flex:0 0 268px;position:sticky;top:88px;background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <span style="font-size:15px;font-weight:600;color:#1E241D">Фильтры</span>
+            <button onClick="{{ clearFilters }}" style="font-size:12.5px;color:#2E6B54;font-weight:500">Сбросить</button>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <div style="font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#8C9186;margin-bottom:10px">Метод терапии</div>
+            <select value="{{ f.modality }}" onChange="{{ onModality }}" style="width:100%;border:1px solid #E3DFD6;border-radius:10px;padding:10px 12px;font-size:14px;color:#1E241D;background:#FBFAF6;outline:none">
+              <sc-for list="{{ modalityOptions }}" as="m" hint-placeholder-count="6">
+                <option value="{{ m }}">{{ m }}</option>
+              </sc-for>
+            </select>
+            <div style="font-size:11.5px;color:#9AA093;margin-top:7px">Показаны 6 из 70+ доступных методов</div>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <div style="font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#8C9186;margin-bottom:10px">Уровень аккредитации</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ levelChips }}" as="c" hint-placeholder-count="3">
+                <button onClick="{{ c.toggle }}" style="{{ c.style }}"><span style="width:8px;height:8px;border-radius:50%;background:{{ c.dot }}"></span>{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#8C9186;margin-bottom:10px">Формат</div>
+            <div style="display:flex;gap:8px">
+              <sc-for list="{{ formatChips }}" as="c" hint-placeholder-count="2">
+                <button onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </aside>
+
+        <!-- RESULTS -->
+        <div style="flex:1;min-width:300px">
+          <div style="font-size:14px;color:#6E7368;margin-bottom:16px">Найдено специалистов: <b style="color:#1E241D">{{ catCount }}</b></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px">
+            <sc-for list="{{ catalog }}" as="s" hint-placeholder-count="6">
+              <div style="background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:22px;display:flex;flex-direction:column">
+                <div style="display:flex;align-items:center;gap:13px;margin-bottom:15px">
+                  <div style="width:50px;height:50px;border-radius:13px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ s.initials }}</div>
+                  <div><div style="font-family:'Lora',serif;font-size:16.5px;font-weight:600;color:#1E241D">{{ s.name }}</div><div style="font-size:12.5px;color:#8C9186">{{ s.city }} · {{ s.formatsStr }}</div></div>
+                </div>
+                <div style="font-size:13.5px;color:#565B52;margin-bottom:12px;flex:1">{{ s.modality }}</div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:{{ s.levelBg }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ s.levelDot }}"></span><span style="font-size:12px;font-weight:600;color:{{ s.levelC }}">{{ s.level }}</span></span>
+                  <span style="font-size:12px;color:#8C9186">до {{ s.reaccred }}</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid #F0EDE6">
+                  <div style="font-size:16px;font-weight:700;color:#1E241D">{{ s.priceStr }}</div>
+                  <button onClick="{{ s.open }}" style="font-size:13.5px;font-weight:600;color:#2E6B54;background:#E9EFEA;padding:9px 16px;border-radius:9px">Профиль →</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isProfile }}">
+    <div class="reveal" style="max-width:1120px;margin:0 auto;padding:32px 28px 72px">
+      <button onClick="{{ goCatalog }}" style="font-size:13.5px;color:#6E7368;margin-bottom:22px;display:flex;align-items:center;gap:6px">← К каталогу</button>
+
+      <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+        <!-- MAIN -->
+        <div style="flex:1;min-width:320px">
+          <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:26px">
+            <div style="width:84px;height:84px;border-radius:20px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:28px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ sel.initials }}</div>
+            <div style="flex:1;min-width:200px">
+              <h1 style="font-family:'Lora',serif;font-weight:600;font-size:clamp(26px,3vw,36px);letter-spacing:-.02em;color:#1E241D;margin:0 0 6px">{{ sel.name }}</h1>
+              <div style="font-size:15px;color:#6E7368;margin-bottom:12px">{{ sel.title }} · {{ sel.city }} · опыт {{ sel.exp }} лет</div>
+              <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:9px;background:{{ sel.levelBg }}"><span style="width:9px;height:9px;border-radius:50%;background:{{ sel.levelDot }}"></span><span style="font-size:14px;font-weight:600;color:{{ sel.levelC }}">{{ sel.level }} ОППЛ</span></div>
+            </div>
+          </div>
+
+          <!-- ACCREDITATION PANEL -->
+          <div style="background:#23473A;color:#EAF0EC;border-radius:18px;padding:26px;margin-bottom:26px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px">
+              <span style="width:24px;height:24px;border-radius:6px;background:#2E6B54;color:#fff;font-family:'Lora',serif;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center">О</span>
+              <span style="font-size:14px;font-weight:600;color:#fff">Аккредитация подтверждена Общероссийской профессиональной психотерапевтической лигой</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:18px">
+              <div><div style="font-size:12px;color:#A9C0B4;margin-bottom:4px">Уровень</div><div style="font-size:16px;font-weight:600;color:#fff">{{ sel.level }}</div></div>
+              <div><div style="font-size:12px;color:#A9C0B4;margin-bottom:4px">Переаккредитация</div><div style="font-size:16px;font-weight:600;color:#fff">до {{ sel.reaccred }}</div></div>
+              <div><div style="font-size:12px;color:#A9C0B4;margin-bottom:4px">Публикации</div><div style="font-size:16px;font-weight:600;color:#fff">{{ sel.pubs }}</div></div>
+              <div><div style="font-size:12px;color:#A9C0B4;margin-bottom:4px">Часы супервизии</div><div style="font-size:16px;font-weight:600;color:#fff">{{ sel.sup }} ч</div></div>
+            </div>
+            <div style="margin-top:18px;padding-top:16px;border-top:1px solid #34564A;display:flex;align-items:center;gap:9px;font-size:13px;color:#A9C0B4"><span style="color:#8FBFA6">✓</span> Нет открытых обращений в Этическую комиссию</div>
+          </div>
+
+          <div style="margin-bottom:26px">
+            <h3 style="font-family:'Lora',serif;font-size:20px;font-weight:600;color:#1E241D;margin:0 0 12px">Метод работы</h3>
+            <div style="background:#fff;border:1px solid #E3DFD6;border-radius:14px;padding:20px">
+              <div style="font-size:15px;font-weight:600;color:#1E241D;margin-bottom:8px">{{ sel.modality }}</div>
+              <p style="font-size:14.5px;line-height:1.65;color:#565B52;margin:0">Специалист {{ sel.reason }} Работает бережно, в темпе клиента, с опорой на профессиональные стандарты ОППЛ.</p>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-family:'Lora',serif;font-size:20px;font-weight:600;color:#1E241D;margin:0 0 12px">С чем работает</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:9px">
+              <sc-for list="{{ sel.topics }}" as="t" hint-placeholder-count="3">
+                <span style="font-size:14px;color:#454B41;background:#EFEBE2;padding:8px 14px;border-radius:9px">{{ t }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOOKING CARD -->
+        <aside style="flex:0 0 320px;position:sticky;top:88px;background:#fff;border:1px solid #E3DFD6;border-radius:18px;padding:24px;box-shadow:0 16px 44px -26px rgba(30,36,29,.3)">
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px"><span style="font-size:28px;font-weight:700;color:#1E241D">{{ sel.priceStr }}</span><span style="font-size:13px;color:#9AA093">/ сессия 50 мин</span></div>
+          <div style="font-size:13px;color:#6E7368;margin-bottom:18px">{{ sel.formatsStr }}</div>
+          <div style="background:#E9EFEA;border-radius:11px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+            <span style="width:9px;height:9px;border-radius:50%;background:#2E6B54;animation:pulseDot 1.6s infinite"></span>
+            <span style="font-size:13.5px;color:#2E6B54;font-weight:500">Ближайшее время: завтра, 15:00</span>
+          </div>
+          <button onClick="{{ sel.book }}" style="width:100%;font-size:15.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:14px;border-radius:12px;margin-bottom:10px">Записаться на сессию</button>
+          <div style="font-size:12.5px;color:#8C9186;text-align:center;margin-bottom:16px">Разово · пакет 3/5/10 · рассрочка · сертификат</div>
+          <div style="padding-top:16px;border-top:1px solid #F0EDE6;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#6E7368">
+            <div style="display:flex;gap:9px"><span style="color:#2E6B54">✓</span> Защищённая переписка после записи</div>
+            <div style="display:flex;gap:9px"><span style="color:#2E6B54">✓</span> Бесплатная отмена за 24 часа</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ isBooking }}">
+    <div class="reveal" style="max-width:780px;margin:0 auto;padding:36px 28px 72px">
+
+      <sc-if value="{{ isBookDone }}">
+      <div style="text-align:center;padding:56px 0">
+        <div style="width:72px;height:72px;border-radius:20px;background:#E9EFEA;color:#2E6B54;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px">✓</div>
+        <h1 style="font-family:'Lora',serif;font-weight:600;font-size:34px;color:#1E241D;margin:0 0 12px">Вы записаны</h1>
+        <p style="font-size:16px;line-height:1.6;color:#565B52;margin:0 auto 28px;max-width:440px">Сессия с <b>{{ sel.name }}</b> — {{ bookSlot }}. Ссылка и напоминание придут на почту. Защищённая переписка со специалистом уже доступна в личном кабинете.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button onClick="{{ goHome }}" style="font-size:15px;font-weight:600;color:#F6F4EF;background:#23473A;padding:13px 26px;border-radius:12px">На главную</button>
+          <button onClick="{{ goCatalog }}" style="font-size:15px;font-weight:600;color:#2E6B54;background:#E9EFEA;padding:13px 26px;border-radius:12px">Найти ещё специалиста</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isBookSlot }}">
+      <div>
+        <button onClick="{{ sel.open }}" style="font-size:13.5px;color:#6E7368;margin-bottom:22px;display:flex;align-items:center;gap:6px">← К профилю</button>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:26px;font-size:13px;color:#8C9186">
+          <span style="color:#1E241D;font-weight:600">1 · Время</span><span>→</span><span>2 · Оплата</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:26px">
+          <div style="width:52px;height:52px;border-radius:13px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ sel.initials }}</div>
+          <div><div style="font-family:'Lora',serif;font-size:18px;font-weight:600;color:#1E241D">{{ sel.name }}</div><div style="font-size:13px;color:#8C9186">{{ sel.modality }}</div></div>
+        </div>
+        <h2 style="font-family:'Lora',serif;font-size:22px;font-weight:600;color:#1E241D;margin:0 0 16px">Выберите время</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:28px">
+          <sc-for list="{{ slots }}" as="sl" hint-placeholder-count="8">
+            <button onClick="{{ sl.pick }}" style="{{ sl.style }}">{{ sl.label }}</button>
+          </sc-for>
+        </div>
+        <button onClick="{{ toBookPay }}" style="width:100%;font-size:15.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:15px;border-radius:12px">Продолжить к оплате</button>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isBookPay }}">
+      <div>
+        <button onClick="{{ backToSlot }}" style="font-size:13.5px;color:#6E7368;margin-bottom:22px;display:flex;align-items:center;gap:6px">← Изменить время</button>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:26px;font-size:13px;color:#8C9186">
+          <span style="color:#8C9186">1 · Время</span><span>→</span><span style="color:#1E241D;font-weight:600">2 · Оплата</span>
+        </div>
+        <h2 style="font-family:'Lora',serif;font-size:22px;font-weight:600;color:#1E241D;margin:0 0 6px">Выберите формат оплаты</h2>
+        <p style="font-size:14px;color:#8C9186;margin:0 0 18px">Сессия {{ bookSlot }} с {{ sel.name }}</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:26px">
+          <sc-for list="{{ packages }}" as="pk" hint-placeholder-count="4">
+            <button onClick="{{ pk.pick }}" style="{{ pk.style }}">
+              <span style="{{ pk.radio }}"></span>
+              <span style="flex:1"><span style="display:block;font-size:15px;font-weight:600;color:#1E241D">{{ pk.title }}</span><span style="display:block;font-size:13px;color:#8C9186;margin-top:2px">{{ pk.desc }}</span></span>
+              <span style="text-align:right"><span style="display:block;font-size:16px;font-weight:700;color:#1E241D">{{ pk.totalStr }}</span><span style="display:block;font-size:12px;color:#2E6B54;font-weight:600">{{ pk.tag }}</span></span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="background:#fff;border:1px solid #E3DFD6;border-radius:14px;padding:20px;margin-bottom:22px">
+          <div style="font-size:13px;font-weight:600;color:#1E241D;margin-bottom:14px">Способ оплаты</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:120px;border:1.5px solid #2E6B54;background:#E9EFEA;border-radius:10px;padding:12px;font-size:13.5px;font-weight:600;color:#2E6B54;text-align:center">Картой</div>
+            <div style="flex:1;min-width:120px;border:1px solid #E3DFD6;border-radius:10px;padding:12px;font-size:13.5px;color:#6E7368;text-align:center">СБП</div>
+            <div style="flex:1;min-width:120px;border:1px solid #E3DFD6;border-radius:10px;padding:12px;font-size:13.5px;color:#6E7368;text-align:center">Сертификат</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#EFEBE2;border-radius:14px;padding:16px 20px;margin-bottom:16px">
+          <span style="font-size:15px;color:#565B52">К оплате</span>
+          <span style="font-family:'Lora',serif;font-size:24px;font-weight:600;color:#1E241D">{{ bookTotalStr }}</span>
+        </div>
+        <button onClick="{{ confirmPay }}" style="width:100%;font-size:15.5px;font-weight:600;color:#F6F4EF;background:#23473A;padding:15px;border-radius:12px">Оплатить и записаться</button>
+        <p style="font-size:12px;color:#9AA093;text-align:center;margin:14px 0 0">Нажимая, вы соглашаетесь с условиями. Комиссия платформы всего 5–10%.</p>
+      </div>
+      </sc-if>
+
+    </div>
+    </sc-if>
+    <sc-if value="{{ isDashboard }}">
+    <div class="reveal" style="max-width:1120px;margin:0 auto;padding:36px 28px 72px">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px">
+        <div style="width:56px;height:56px;border-radius:14px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center">МК</div>
+        <div style="flex:1;min-width:200px">
+          <h1 style="font-family:'Lora',serif;font-weight:600;font-size:28px;letter-spacing:-.02em;color:#1E241D;margin:0">Кабинет специалиста</h1>
+          <div style="font-size:14px;color:#8C9186">Мария Кольцова · Эксперт ОППЛ</div>
+        </div>
+        <button style="font-size:14px;font-weight:600;color:#F6F4EF;background:#23473A;padding:11px 18px;border-radius:11px">Редактировать профиль</button>
+      </div>
+
+      <!-- renewal reminder -->
+      <div style="background:#F3ECD9;border:1px solid #E6D8B2;border-radius:14px;padding:14px 18px;margin:20px 0 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="width:9px;height:9px;border-radius:50%;background:#A07C3B"></span>
+        <span style="font-size:14px;color:#7A5E23;flex:1;min-width:220px">Переаккредитация уровня «Эксперт» — до <b>марта 2027</b>. Осталось загрузить 2 из 5 документов.</span>
+        <button onClick="{{ goAccred }}" style="font-size:13.5px;font-weight:600;color:#A07C3B;text-decoration:underline;text-underline-offset:3px">Продолжить</button>
+      </div>
+
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px;background:#EFEBE2;padding:5px;border-radius:13px;width:fit-content">
+        <sc-for list="{{ dashTabs }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button>
+        </sc-for>
+      </div>
+
+      <!-- OVERVIEW -->
+      <sc-if value="{{ isDashOverview }}">
+      <div class="reveal">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:26px">
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px"><div style="font-size:13px;color:#8C9186;margin-bottom:8px">Сессий в этом месяце</div><div style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#1E241D">38</div></div>
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px"><div style="font-size:13px;color:#8C9186;margin-bottom:8px">Новых клиентов</div><div style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#1E241D">9</div></div>
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px"><div style="font-size:13px;color:#8C9186;margin-bottom:8px">Доход (после комиссии)</div><div style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#1E241D">162 000 ₽</div></div>
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px"><div style="font-size:13px;color:#8C9186;margin-bottom:8px">Комиссия платформы</div><div style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#2E6B54">7%</div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:24px">
+          <h3 style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#1E241D;margin:0 0 16px">Ближайшие сессии</h3>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ upcoming }}" as="u" hint-placeholder-count="3">
+              <div style="{{ u.style }}">
+                <div style="width:44px;height:44px;border-radius:11px;background:#E9EFEA;color:#2E6B54;font-family:'Lora',serif;font-weight:600;display:flex;align-items:center;justify-content:center">{{ u.initials }}</div>
+                <div style="flex:1"><div style="font-size:15px;font-weight:600;color:#1E241D">{{ u.client }}</div><div style="font-size:13px;color:#8C9186">{{ u.type }}</div></div>
+                <div style="font-size:14px;font-weight:600;color:#1E241D">{{ u.when }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ACCREDITATION TRACK -->
+      <sc-if value="{{ isDashAccred }}">
+      <div class="reveal">
+        <div style="background:#23473A;color:#EAF0EC;border-radius:18px;padding:26px;margin-bottom:24px">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center">
+            <div>
+              <div style="font-size:13px;color:#A9C0B4;margin-bottom:6px">Текущий уровень</div>
+              <div style="font-family:'Lora',serif;font-size:28px;font-weight:600;color:#fff">Эксперт ОППЛ</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:13px;color:#A9C0B4;margin-bottom:6px">Переаккредитация до</div>
+              <div style="font-family:'Lora',serif;font-size:24px;font-weight:600;color:#fff">март 2027</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;height:8px;border-radius:5px;background:#34564A;overflow:hidden"><div style="width:60%;height:100%;background:#8FBFA6;border-radius:5px"></div></div>
+          <div style="font-size:12.5px;color:#A9C0B4;margin-top:8px">Готовность к переаккредитации: 3 из 5 требований выполнено</div>
+        </div>
+        <h3 style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#1E241D;margin:0 0 14px">Требования уровня «Эксперт»</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ reqs }}" as="r" hint-placeholder-count="5">
+            <div style="background:#fff;border:1px solid #E3DFD6;border-radius:13px;padding:16px 18px;display:flex;align-items:center;gap:14px">
+              <span style="{{ r.iconStyle }}">{{ r.icon }}</span>
+              <span style="flex:1;font-size:14.5px;color:#1E241D">{{ r.label }}</span>
+              <span style="font-size:13px;font-weight:600;color:{{ r.statusColor }}">{{ r.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- SCHEDULE -->
+      <sc-if value="{{ isDashSchedule }}">
+      <div class="reveal" style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:24px">
+        <h3 style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#1E241D;margin:0 0 18px">Неделя · 30 июн — 6 июл</h3>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+          <sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
+            <div style="text-align:center">
+              <div style="font-size:12px;color:#8C9186;margin-bottom:8px">{{ d.day }}</div>
+              <div style="{{ d.style }}"><span style="font-size:15px;font-weight:600">{{ d.num }}</span><span style="display:block;font-size:11px;margin-top:3px;{{ d.subStyle }}">{{ d.sub }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:20px;font-size:13px;color:#6E7368;display:flex;gap:18px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:7px"><span style="width:10px;height:10px;border-radius:3px;background:#23473A"></span> Занятые слоты</span>
+          <span style="display:flex;align-items:center;gap:7px"><span style="width:10px;height:10px;border-radius:3px;background:#E9EFEA;border:1px solid #D3E0D8"></span> Открыто для записи</span>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- EARNINGS -->
+      <sc-if value="{{ isDashEarn }}">
+      <div class="reveal">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:22px">
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px"><div style="font-size:13px;color:#8C9186;margin-bottom:8px">Начислено за июнь</div><div style="font-family:'Lora',serif;font-size:30px;font-weight:600;color:#1E241D">174 000 ₽</div></div>
+          <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:22px"><div style="font-size:13px;color:#8C9186;margin-bottom:8px">Удержано платформой (7%)</div><div style="font-family:'Lora',serif;font-size:30px;font-weight:600;color:#BE6C46">−12 000 ₽</div></div>
+          <div style="background:#23473A;color:#fff;border-radius:16px;padding:22px"><div style="font-size:13px;color:#A9C0B4;margin-bottom:8px">К выплате</div><div style="font-family:'Lora',serif;font-size:30px;font-weight:600;color:#fff">162 000 ₽</div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #E3DFD6;border-radius:16px;padding:24px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;height:180px">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="6">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+                <div style="width:100%;max-width:46px;border-radius:8px 8px 0 0;background:#2E6B54;height:{{ b.h }}"></div>
+                <div style="font-size:12px;color:#8C9186">{{ b.m }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+    </sc-if>
+
+  </main>
+
+  <footer style="background:#1E241D;color:#B9BEB2;margin-top:0">
+    <div style="max-width:1180px;margin:0 auto;padding:52px 28px 40px;display:flex;flex-wrap:wrap;gap:48px">
+      <div style="flex:1;min-width:260px;max-width:340px">
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+          <span style="width:30px;height:30px;border-radius:8px;background:#2E6B54;color:#F6F4EF;font-family:'Lora',serif;font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center">О</span>
+          <span style="font-family:'Lora',serif;font-size:18px;font-weight:600;color:#F6F4EF">ОППЛ.Специалисты</span>
+        </div>
+        <p style="font-size:13.5px;line-height:1.65;margin:0;color:#8C9186">Единственная площадка, где аккредитацию выдаёт профессиональное сообщество, а не частная компания. Проект Общероссийской профессиональной психотерапевтической лиги.</p>
+      </div>
+      <div style="display:flex;gap:56px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6E7368;margin-bottom:14px">Клиентам</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+            <span>Подбор через ИИ</span><span>Каталог специалистов</span><span>Как это работает</span><span>Тесты и самопомощь</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6E7368;margin-bottom:14px">Специалистам</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+            <span>Аккредитация</span><span>Личный кабинет</span><span>Тарифы и комиссия</span><span>Этическая комиссия</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid #33392F"><div style="max-width:1180px;margin:0 auto;padding:18px 28px;font-size:12.5px;color:#6E7368">© 2026 ОППЛ.Специалисты · Прототип</div></div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760}}">
+class Component extends DCLogic {
+  state = {
+    route: 'home',
+    matchStep: 0,          // 0 input, 1 analyzing, 2 results
+    query: '',
+    refine: '',
+    catFilters: { level: '', format: '', modality: '' },
+    selectedId: null,
+    bookStep: 0,           // 0 slot, 1 package, 2 pay, 3 done
+    bookSlot: null,
+    bookPackage: 'single',
+    dashTab: 'overview',
+  };
+
+  data() {
+    return {
+      specialists: [
+        { id:'s1', name:'Мария Кольцова', title:'Психолог, психотерапевт', modality:'Эмоционально-фокусированная терапия (ЭФТ)', level:'Эксперт', price:4500, city:'Москва', formats:['Онлайн','Очно'], gender:'Женщина', exp:12, reaccred:'мар 2027', topics:['Отношения','Кризисы в паре','Тревога'], reason:'специализируется на кризисах в отношениях и применяет ЭФТ — метод, направленный на восстановление эмоционального контакта между партнёрами.', score:96, pubs:8, sup:340 },
+        { id:'s2', name:'Ольга Терехова', title:'Психолог', modality:'Гештальт-терапия', level:'Специалист', price:3800, city:'Москва', formats:['Онлайн','Очно'], gender:'Женщина', exp:8, reaccred:'сен 2026', topics:['Отношения','Самооценка','Эмоции'], reason:'работает с трудностями в общении и умением слышать себя и партнёра через гештальт-подход.', score:91, pubs:2, sup:180 },
+        { id:'s3', name:'Андрей Левин', title:'Клинический психолог', modality:'Когнитивно-поведенческая терапия (КПТ)', level:'Специалист', price:3500, city:'Санкт-Петербург', formats:['Онлайн'], gender:'Мужчина', exp:7, reaccred:'ноя 2026', topics:['Тревога','Отношения','Стресс'], reason:'помогает выстроить конкретные навыки коммуникации и снизить напряжение в спорах.', score:87, pubs:1, sup:150 },
+        { id:'s4', name:'Дмитрий Соколов', title:'Психоаналитик', modality:'Психоанализ', level:'Эксперт', price:5200, city:'Онлайн', formats:['Онлайн'], gender:'Мужчина', exp:18, reaccred:'янв 2028', topics:['Отношения','Идентичность','Смысл'], reason:'исследует глубинные повторяющиеся сценарии в отношениях, которые приводят к конфликтам.', score:82, pubs:14, sup:520 },
+        { id:'s5', name:'Екатерина Волкова', title:'Психолог', modality:'Схема-терапия', level:'Практик', price:2800, city:'Казань', formats:['Онлайн'], gender:'Женщина', exp:4, reaccred:'июн 2026', topics:['Самооценка','Отношения','Детство'], reason:'работает с устойчивыми паттернами, из-за которых человек чувствует себя неуслышанным.', score:79, pubs:0, sup:60 },
+        { id:'s6', name:'Игорь Мельник', title:'Психотерапевт', modality:'Экзистенциальная терапия', level:'Эксперт', price:4800, city:'Москва', formats:['Онлайн','Очно'], gender:'Мужчина', exp:22, reaccred:'апр 2027', topics:['Смысл','Отношения','Кризисы'], reason:'помогает паре заново услышать друг друга через разговор о ценностях и потребностях.', score:76, pubs:11, sup:610 },
+      ],
+    };
+  }
+
+  levelMeta(level){
+    if(level==='Эксперт') return { c:'#A07C3B', bg:'#F3ECD9', dot:'#A07C3B' };
+    if(level==='Специалист') return { c:'#2E6B54', bg:'#E5EFE9', dot:'#2E6B54' };
+    return { c:'#7A6B8A', bg:'#ECE7F0', dot:'#7A6B8A' };
+  }
+
+  nav(route){ this.setState({ route }); if(typeof window!=='undefined') window.scrollTo({top:0}); }
+
+  getSelected(){ return this.data().specialists.find(s=>s.id===this.state.selectedId) || this.data().specialists[0]; }
+
+  mapSpec(s){
+    const m = this.levelMeta(s.level);
+    return {
+      ...s,
+      levelC:m.c, levelBg:m.bg, levelDot:m.dot,
+      formatsStr:s.formats.join(' · '),
+      priceStr:s.price.toLocaleString('ru-RU')+' ₽',
+      initials:s.name.split(' ').map(w=>w[0]).join(''),
+      open: ()=>{ this.setState({ route:'profile', selectedId:s.id }); window.scrollTo({top:0}); },
+      book: ()=>{ this.setState({ route:'booking', selectedId:s.id, bookStep:0, bookSlot:null, bookPackage:'single' }); window.scrollTo({top:0}); },
+    };
+  }
+
+  openProfile(id){ this.setState({ route:'profile', selectedId:id }); window.scrollTo({top:0}); }
+
+  setLevel(v){ return ()=>this.setState(s=>({ catFilters:{...s.catFilters, level:s.catFilters.level===v?'':v} })); }
+  setFormat(v){ return ()=>this.setState(s=>({ catFilters:{...s.catFilters, format:s.catFilters.format===v?'':v} })); }
+  pickSlot(slot){ return ()=>this.setState({ bookSlot:slot }); }
+  setPackage(p){ return ()=>this.setState({ bookPackage:p }); }
+  setDashTab(t){ return ()=>this.setState({ dashTab:t }); }
+
+  runMatch(){
+    this.setState({ matchStep:1 });
+    clearTimeout(this._mt);
+    this._mt = setTimeout(()=>this.setState({ matchStep:2 }), 2100);
+  }
+
+  renderVals(){
+    const S = this.state;
+    const go = (route)=>()=>this.nav(route);
+    const navDefs = [
+      { key:'match', label:'Подбор ИИ' },
+      { key:'catalog', label:'Каталог' },
+    ];
+    const navItems = navDefs.map(n=>{
+      const active = S.route===(n.route||n.key);
+      return { label:n.label, go: go(n.route||n.key),
+        style:`font-size:14px;font-weight:${active?600:500};color:${active?'#1E241D':'#6E7368'};padding:9px 13px;border-radius:9px;background:${active?'#EBE7DE':'transparent'}` };
+    });
+
+    const specs = this.data().specialists.map(s=>this.mapSpec(s));
+    const featured = specs.slice(0,3);
+
+    // ---- Catalog filtering
+    const f = S.catFilters;
+    const catalog = specs.filter(s=>
+      (!f.level || s.level===f.level) &&
+      (!f.format || s.formats.includes(f.format)) &&
+      (!f.modality || s.modality===f.modality)
+    );
+
+    // ---- Matching results (sorted by score)
+    const matches = [...specs].sort((a,b)=>b.score-a.score).slice(0,4);
+
+    const sel = this.mapSpec(this.getSelected());
+
+    return {
+      navItems,
+      goHome: go('home'),
+      goMatch: ()=>{ this.setState({ route:'match', matchStep:0 }); window.scrollTo({top:0}); },
+      goDashboard: go('dashboard'), goCatalog: go('catalog'),
+
+      isHome:S.route==='home', isMatch:S.route==='match', isCatalog:S.route==='catalog',
+      isProfile:S.route==='profile', isBooking:S.route==='booking', isDashboard:S.route==='dashboard',
+
+      // home
+      featured,
+      compareRows:[
+        { label:'Терапевтических методов', ours:'70+', theirs:'13–40' },
+        { label:'Уровней аккредитации', ours:'3', theirs:'Нет или 1' },
+        { label:'Дата переаккредитации', ours:'Видна', theirs:'Нет' },
+        { label:'Этическая комиссия', ours:'Да, публично', theirs:'Нет' },
+        { label:'Подбор по свободному тексту', ours:'Да, ИИ', theirs:'Только фильтры' },
+        { label:'Комиссия платформы', ours:'5–10%', theirs:'20–30%' },
+        { label:'За аккредитацией стоит', ours:'ОППЛ', theirs:'Частные компании' },
+      ].map((r,i)=>({ ...r, style:`display:grid;grid-template-columns:1.6fr 1fr 1fr;${i%2?'background:#FBFAF6;':''}${i>0?'border-top:1px solid #F0EDE6;':''}` })),
+      startMatch: ()=>{ this.setState({ route:'match', matchStep:0 }); window.scrollTo({top:0}); },
+
+      // match
+      matchStep:S.matchStep,
+      isMatchInput:S.matchStep===0, isMatchAnalyzing:S.matchStep===1, isMatchResults:S.matchStep===2,
+      query:S.query,
+      onQuery:(e)=>this.setState({ query:e.target.value }),
+      fillExample:()=>this.setState({ query:'Постоянно ссоримся с партнёром, и я чувствую, что меня не слышат. Хочу разобраться, что происходит между нами.' }),
+      runMatch:()=>this.runMatch(),
+      resetMatch:()=>this.setState({ matchStep:0 }),
+      matches,
+      refine:S.refine,
+      onRefine:(e)=>this.setState({ refine:e.target.value }),
+      applyRefine:()=>{ this.setState({ matchStep:1 }); clearTimeout(this._mt); this._mt=setTimeout(()=>this.setState({ matchStep:2, refine:'' }),1400); },
+
+      // catalog
+      catalog,
+      catCount:catalog.length,
+      f,
+      onModality:(e)=>this.setState({ catFilters:{...S.catFilters, modality:e.target.value} }),
+      clearFilters:()=>this.setState({ catFilters:{ level:'', format:'', modality:'' } }),
+      modalityOptions:['','Эмоционально-фокусированная терапия (ЭФТ)','Гештальт-терапия','Когнитивно-поведенческая терапия (КПТ)','Психоанализ','Схема-терапия','Экзистенциальная терапия'],
+      levelChips:['Практик','Специалист','Эксперт'].map(lv=>{
+        const m=this.levelMeta(lv); const on=f.level===lv;
+        return { label:lv, dot:m.dot, toggle:this.setLevel(lv),
+          style:`display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:${on?600:500};color:${on?m.c:'#565B52'};padding:9px 12px;border-radius:9px;border:1px solid ${on?m.dot:'#E3DFD6'};background:${on?m.bg:'#FBFAF6'};text-align:left`};
+      }),
+      formatChips:['Онлайн','Очно'].map(ft=>{
+        const on=f.format===ft;
+        return { label:ft, toggle:this.setFormat(ft),
+          style:`flex:1;font-size:13.5px;font-weight:${on?600:500};color:${on?'#2E6B54':'#565B52'};padding:9px 10px;border-radius:9px;border:1px solid ${on?'#2E6B54':'#E3DFD6'};background:${on?'#E9EFEA':'#FBFAF6'}`};
+      }),
+
+      // profile
+      sel,
+
+      // booking view-models
+      slots:['Завтра · 11:00','Завтра · 15:00','Завтра · 18:30','Чт · 10:00','Чт · 14:00','Чт · 19:00','Пт · 12:00','Пт · 16:30'].map(l=>{
+        const on=S.bookSlot===l;
+        return { label:l, pick:this.pickSlot(l),
+          style:`padding:13px 10px;border-radius:11px;font-size:14px;font-weight:${on?600:500};color:${on?'#F6F4EF':'#1E241D'};background:${on?'#23473A':'#FBFAF6'};border:1px solid ${on?'#23473A':'#E3DFD6'};text-align:center`};
+      }),
+      packages:(()=>{
+        const p=sel.price; const fmt=(n)=>Math.round(n/100)*100;
+        return [
+          { key:'single', title:'Разовая сессия', desc:'1 сессия', total:p, tag:'' },
+          { key:'p3', title:'Пакет 3 сессии', desc:fmt(p*.95)+' ₽ / сессия', total:fmt(p*3*.95), tag:'−5%' },
+          { key:'p5', title:'Пакет 5 сессий', desc:fmt(p*.9)+' ₽ / сессия', total:fmt(p*5*.9), tag:'−10%' },
+          { key:'p10', title:'Пакет 10 сессий', desc:'рассрочка доступна', total:fmt(p*10*.85), tag:'−15%' },
+        ].map(pk=>{
+          const on=S.bookPackage===pk.key;
+          return { ...pk, totalStr:pk.total.toLocaleString('ru-RU')+' ₽', pick:this.setPackage(pk.key),
+            style:`text-align:left;width:100%;padding:16px 18px;border-radius:14px;background:${on?'#E9EFEA':'#FBFAF6'};border:1.5px solid ${on?'#2E6B54':'#E3DFD6'};display:flex;align-items:center;gap:14px`,
+            radio:`width:20px;height:20px;border-radius:50%;border:2px solid ${on?'#2E6B54':'#CFC9BC'};background:${on?'#2E6B54':'transparent'};flex:0 0 auto;box-shadow:${on?'inset 0 0 0 3px #E9EFEA':'none'}`};
+        });
+      })(),
+      bookTotalStr:(()=>{ const map={single:sel.price,p3:Math.round(sel.price*3*.95/100)*100,p5:Math.round(sel.price*5*.9/100)*100,p10:Math.round(sel.price*10*.85/100)*100}; return (map[S.bookPackage]||sel.price).toLocaleString('ru-RU')+' ₽'; })(),
+
+      // booking
+      bookStep:S.bookStep, bookSlot:S.bookSlot, bookPackage:S.bookPackage,
+      isBookSlot:S.bookStep===0, isBookPay:S.bookStep===1, isBookDone:S.bookStep===2,
+      toBookPay:()=>{ if(S.bookSlot) this.setState({ bookStep:1 }); },
+      confirmPay:()=>{ this.setState({ bookStep:2 }); window.scrollTo({top:0}); },
+      backToSlot:()=>this.setState({ bookStep:0 }),
+
+      // dashboard
+      dashTab:S.dashTab,
+      isDashOverview:S.dashTab==='overview', isDashAccred:S.dashTab==='accred', isDashSchedule:S.dashTab==='schedule', isDashEarn:S.dashTab==='earnings',
+      dashTabs:[['overview','Обзор'],['accred','Аккредитация'],['schedule','Расписание'],['earnings','Доходы']].map(([k,l])=>{
+        const on=S.dashTab===k;
+        return { label:l, go:this.setDashTab(k),
+          style:`font-size:14px;font-weight:${on?600:500};color:${on?'#1E241D':'#6E7368'};padding:11px 16px;border-radius:10px;background:${on?'#fff':'transparent'};border:1px solid ${on?'#E3DFD6':'transparent'};white-space:nowrap`};
+      }),
+      goAccred:()=>this.setState({ dashTab:'accred' }),
+      upcoming:[
+        { initials:'АП', client:'Анна П.', type:'Пара · онлайн · 50 мин', when:'Сегодня 15:00' },
+        { initials:'ДК', client:'Дмитрий К.', type:'Индивидуально · очно', when:'Сегодня 17:00' },
+        { initials:'МС', client:'Марина С.', type:'Индивидуально · онлайн', when:'Завтра 11:00' },
+      ].map((u,i)=>({ ...u, style:`display:flex;align-items:center;gap:14px;padding:14px 0;${i>0?'border-top:1px solid #F0EDE6;':''}` })),
+      reqs:[
+        { label:'Подтверждённое профильное образование', done:true },
+        { label:'Документально подтверждённая практика (свыше 1000 ч)', done:true },
+        { label:'Публикации в профессиональных изданиях', done:true },
+        { label:'Преподавательская деятельность — справка', done:false },
+        { label:'Рекомендация старшего члена лиги', done:false },
+      ].map(r=>({ label:r.label,
+        icon:r.done?'✓':'○', status:r.done?'Готово':'Ожидает', statusColor:r.done?'#2E6B54':'#A07C3B',
+        iconStyle:`width:26px;height:26px;border-radius:8px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;background:${r.done?'#E5EFE9':'#F3ECD9'};color:${r.done?'#2E6B54':'#A07C3B'}` })),
+      week:[['Пн','30'],['Вт','1'],['Ср','2'],['Чт','3'],['Пт','4'],['Сб','5'],['Вс','6']].map(([day,num],i)=>{
+        const busy=[0,2,3].includes(i); const open=[1,4].includes(i); const off=[5,6].includes(i);
+        const bg=busy?'#23473A':open?'#E9EFEA':'#FBFAF6';
+        const col=busy?'#fff':off?'#C4C0B6':'#1E241D';
+        const border=open?'1px solid #D3E0D8':busy?'none':'1px solid #EDE9E0';
+        return { day, num, sub:busy?'3 сессии':open?'свободно':'', subStyle:`color:${busy?'#A9C0B4':'#2E6B54'}`,
+          style:`border-radius:12px;padding:14px 6px;background:${bg};color:${col};border:${border}` };
+      }),
+      bars:[['Янв','60%'],['Фев','72%'],['Мар','58%'],['Апр','84%'],['Май','76%'],['Июн','96%']].map(([m,h])=>({ m, h })),
+    };
+  }
+}
+</script>
+</body>
+</html>
